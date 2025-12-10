@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Link Auto Opener</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.25);
+        width: 90%;
+        max-width: 420px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 10px;
+        color: gold;
+    }
+
+    p {
+        font-size: 14px;
+        opacity: 0.8;
+        margin-bottom: 25px;
+    }
+
+    #playBtn {
+        background: gold;
+        color: black;
+        border: none;
+        padding: 15px 40px;
+        font-size: 18px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    }
+
+    #playBtn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+    }
+
+    /* Loading spinner */
+    .spinner {
+        display: none;
+        margin: 25px auto;
+        width: 70px;
+        height: 70px;
+        border: 6px solid rgba(255, 215, 0, 0.2);
+        border-top: 6px solid gold;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .timer {
+        margin-top: 15px;
+        font-size: 16px;
+        color: gold;
+        font-weight: bold;
+        display: none;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="card">
+    <h1>Random Link Loader</h1>
+    <p>Tekan tombol PLAY untuk memulai proses pencarian link acak selama 10 detik.</p>
+
+    <button id="playBtn">PLAY</button>
+
+    <div class="spinner" id="spinner"></div>
+    <div class="timer" id="timer">10</div>
+</div>
+
+<script>
+    // ============================
+    // GANTI LINK-LINK DI SINI BANG
+    // ============================
+    const links = [
+        "https://sfl.gl/ARhGinN8",
+        "https://sfl.gl/yN29t",
+        "https://sfl.gl/jRuEF",
+        "https://sfl.gl/jRHEPR",
+        "https://sfl.gl/DcJA",
+        "https://sfl.gl/wyrVe08a",
+        "https://sfl.gl/LqUjj",
+        "https://sfl.gl/4h9A2vF",
+        "https://sfl.gl/Tu0iH5",
+        "https://sfl.gl/fex6v",
+        "https://sfl.gl/SfxV",
+        "https://sfl.gl/qPzxs",
+        "https://sfl.gl/lxDn3Nq0",
+        "https://sfl.gl/LQ4vbk",
+        "https://sfl.gl/UvlAY",
+        "https://sfl.gl/d9AIbey7",
+        "https://sfl.gl/XnkqGf8",
+        "https://sfl.gl/f6tsXc",
+        "https://sfl.gl/8x0AgY",
+        "https://sfl.gl/rTj7K",
+        "https://sfl.gl/N9TeFlo",
+        "https://sfl.gl/e4fNUz",
+        "https://sfl.gl/ea1fCb",
+        "https://sfl.gl/ea1fCb",
+        "https://sfl.gl/osvVUv",
+        "https://sfl.gl/IBaF",
+        "https://sfl.gl/Omski4",
+        "https://sfl.gl/u5XrbW",
+        "https://sfl.gl/6GRwh",
+        "https://sfl.gl/aFOyz",
+        "https://sfl.gl/EqvS6PYL",
+        "https://sfl.gl/t93zC",
+        "https://sfl.gl/M7E0Eg2",
+        "https://sfl.gl/ARhGinN8",
+        "https://sfl.gl/yN29t",
+        "https://sfl.gl/jRuEF",
+        "https://sfl.gl/jRHEPR",
+        "https://sfl.gl/DcJA",
+        "https://sfl.gl/wyrVe08a",
+        "https://sfl.gl/LqUjj",
+        "https://sfl.gl/4h9A2vF",
+        "https://sfl.gl/Tu0iH5",
+        "https://sfl.gl/fex6v",
+        "https://sfl.gl/SfxV",
+        "https://sfl.gl/qPzxs",
+        "https://sfl.gl/lxDn3Nq0",
+        "https://sfl.gl/LQ4vbk",
+        "https://sfl.gl/UvlAY",
+        "https://sfl.gl/d9AIbey7",
+        "https://sfl.gl/XnkqGf8",
+        "https://sfl.gl/f6tsXc",
+        "https://sfl.gl/8x0AgY",
+        "https://sfl.gl/rTj7K",
+        "https://sfl.gl/N9TeFlo",
+        "https://sfl.gl/e4fNUz",
+        "https://sfl.gl/ea1fCb",
+        "https://sfl.gl/ea1fCb",
+        "https://sfl.gl/osvVUv",
+        "https://sfl.gl/IBaF",
+        "https://sfl.gl/Omski4",
+        "https://sfl.gl/u5XrbW",
+        "https://sfl.gl/6GRwh",
+        "https://sfl.gl/aFOyz",
+        "https://sfl.gl/EqvS6PYL",
+        "https://sfl.gl/t93zC",
+        "https://sfl.gl/M7E0Eg2",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        "https://saweria.co/ABANGADEKganteng",
+        
+
+
+
+
+        // Tambahkan sampai 100 link
+    ];
+    // ============================
+
+    const playBtn = document.getElementById("playBtn");
+    const spinner = document.getElementById("spinner");
+    const timer = document.getElementById("timer");
+
+    playBtn.addEventListener("click", () => {
+        playBtn.style.display = "none";
+        spinner.style.display = "block";
+        timer.style.display = "block";
+
+        let timeLeft = 10;
+        timer.textContent = timeLeft;
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            timer.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                openRandomLink();
+            }
+        }, 1000);
+    });
+
+    function openRandomLink() {
+        spinner.style.display = "none";
+        timer.textContent = "Membuka link…";
+
+        const randomIndex = Math.floor(Math.random() * links.length);
+        const finalLink = links[randomIndex];
+
+        // Buka link secara otomatis
+        setTimeout(() => {
+            window.location.href = finalLink;
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
